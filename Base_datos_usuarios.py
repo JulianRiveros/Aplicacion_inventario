@@ -2,27 +2,30 @@
 from pymongo import MongoClient
 import bcrypt
 
+
 # Conectar a MongoDB
-try:
-    client = MongoClient('mongodb://localhost:27017/')
-    db = client['GestorLaGrieta'] # Reemplaza 'mydatabase' con tu nombre de base de datos
-    print("Conexión exitosa a MongoDB")
-except Exception as e:
-    print(f"No se pudo conectar a MongoDB: {e}")
+def crear_conexion_base_datos():
+    try:
+        client = MongoClient('mongodb://localhost:27017/')
+        db = client['GestorLaGrieta'] # Reemplaza 'mydatabase' con tu nombre de base de datos
+        print("Conexión exitosa a MongoDB")
+    except Exception as e:
+        print(f"No se pudo conectar a MongoDB: {e}")
 
 
-#Verificar conexion
-try:
-    # El siguiente comando intentará recuperar la lista de bases de datos y fallará si la conexión no está disponible
-    client.admin.command('ping')
-    print("Conexión a MongoDB exitosa")
-except Exception as e:
-    print(f"Error al conectar a MongoDB: {e}")
+    #Verificar conexion
+    try:
+        # El siguiente comando intentará recuperar la lista de bases de datos y fallará si la conexión no está disponible
+        client.admin.command('ping')
+        print("Conexión a MongoDB exitosa")
+    except Exception as e:
+        print(f"Error al conectar a MongoDB: {e}")
 
-# Definir la colección
-usuarios = db['usuarios']
+    # Definir la colección
+    usuarios = db['usuarios']
+    return usuarios
 
-def registrar_usuario(nombre_usuario, contrasenia):
+def registrar_usuario(nombre_usuario, contrasenia, usuarios):
     #Verificar si el usuario ya existe
     if usuarios.find_one ({"nombre_usuario": nombre_usuario}):
         print("El usuario ya existe. ")
@@ -37,7 +40,7 @@ def registrar_usuario(nombre_usuario, contrasenia):
     print("Usuario Registrado Exitosamente.")
     return True
 
-def iniciar_sesion(nombre_usuario, contrasenia):
+def iniciar_sesion(nombre_usuario, contrasenia,usuarios):
     #Buscar el usuario en la base de datos 
     usuario = usuarios.find_one({"nombre_usuario": nombre_usuario})
 
@@ -52,35 +55,8 @@ def iniciar_sesion(nombre_usuario, contrasenia):
     else:
         print("El usuario no existe.")
         return False
-    
-        
-# Crear documentos de ejemplo e insertarlos en la colección
-if __name__ == "__main__":
-    while True:
-        print("\nOpciones:")
-        print("1. Registrar usuario")
-        print("2. Iniciar sesión")
-        print("3. Salir")
-        opcion = input ("Seleccione una opcion: ")
-
-        if opcion == "1":
-            nombre_usuario= input("Ingrese nombre de usuario: ")
-            contrasenia = input("Ingrese contraseña: ")
-            registrar_usuario(nombre_usuario, contrasenia)
-        elif opcion == "2":
-            nombre_usuario= input("Ingrese nombre de usuario: ")
-            contrasenia = input("Ingrese contraseña: ")
-            iniciar_sesion(nombre_usuario, contrasenia)
-        elif opcion == "3":
-            break
-        else:
-            print("Opcion no valida. Intente nuevamente.")
-        
 
 """
-# Consultar todos los usuarios
-for usuario in usuarios.find():
-    print(usuario)
-"""
 
+"""
 
