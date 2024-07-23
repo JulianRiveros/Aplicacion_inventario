@@ -1,28 +1,36 @@
 
 from pymongo import MongoClient
 import bcrypt
+import json
+
+class Usuario:
+    def __init__(self, nombreUsuario, contraseña):
+        self.nombreUsuario = nombreUsuario
+        self.contraseña = contraseña
+
+    def __str__(self):
+        return f"Usuario: {self.nombreUsuario}"
+
+    def verificar_contraseña(self, contraseña):
+        return self.contraseña == contraseña
 
 
-# Conectar a MongoDB
+# Verificar conexion a MongoDB
 def crear_conexion_base_datos():
     try:
         client = MongoClient('mongodb://localhost:27017/')
         db = client['GestorLaGrieta'] # Reemplaza 'mydatabase' con tu nombre de base de datos
+        client.admin.command('ping')
         print("Conexión exitosa a MongoDB")
+        #print(db.list_collection_names())
+
     except Exception as e:
         print(f"No se pudo conectar a MongoDB: {e}")
 
 
-    #Verificar conexion
-    try:
-        # El siguiente comando intentará recuperar la lista de bases de datos y fallará si la conexión no está disponible
-        client.admin.command('ping')
-        print("Conexión a MongoDB exitosa")
-    except Exception as e:
-        print(f"Error al conectar a MongoDB: {e}")
-
     # Definir la colección
     usuarios = db['usuarios']
+    
     return usuarios
 
 def registrar_usuario(nombre_usuario, contrasenia, usuarios):
@@ -33,9 +41,15 @@ def registrar_usuario(nombre_usuario, contrasenia, usuarios):
     #Hash de la contraseña
     contrasenia_hash = bcrypt.hashpw(contrasenia.encode('utf-8'), bcrypt.gensalt())
 
+    usuario_json = {
+        "nombre_usuario": nombre_usuario,
+        "contraseña": contrasenia_hash  # Asegúrate de hash la contraseña
+    }
+    usuarios.insert_one(usuario_json)
+    admin = Usuario(nombre_usuario, contrasenia_hash)
     #Insertar el nuevo usuario en la base de datos
-    usuarios.insert_one({'nombre_usuario': nombre_usuario,
-                        'contraseña': contrasenia_hash})
+    #usuarios.insert_one({'nombre_usuario': nombre_usuario,
+    #                   'contraseña': contrasenia_hash})
 
     print("Usuario Registrado Exitosamente.")
     return True
@@ -48,7 +62,8 @@ def iniciar_sesion(nombre_usuario, contrasenia,usuarios):
         #verificar la contraseña
         if bcrypt.checkpw(contrasenia.encode('utf-8'), usuario['contraseña']):
             print("Inicio de Sesion exitoso.")
-            return True
+            admin = Usuario(nombre_usuario, contrasenia)
+            return admin
         else:
             print("Contraseña Incorrecta.")
             return False
@@ -60,3 +75,39 @@ def iniciar_sesion(nombre_usuario, contrasenia,usuarios):
 
 """
 
+def buscar_usuario(nombreUsuario,usuarios):
+    usuario = usuarios.find_one({"nombre_usuario": nombreUsuario})
+
+    if usuario:
+        print("Usuario Existente")
+        return True
+    else:
+        print("Usuario No existente")
+        return False
+
+##Funcion para modificar la contraseña del usuario existente
+def modificar_usuario(nombreUsuario, nuevaContrasenia,usuarios):
+    query = {'nombre_usuario': nombreUsuario}
+    ##print
+    
+    usuario = usuarios.find_one({"nombre_usuario": nombreUsuario})
+    if usuario:
+        contrasenia_hash = bcrypt.hashpw(nuevaContrasenia.encode('utf-8'), bcrypt.gensalt())
+        newValue = {'$set': {'contraseña': contrasenia_hash}}
+        result = usuarios.update_one(query, newValue)
+        print(f'{result.modified_count} usuario {nombreUsuario}  actualizado exitosamente')
+    else:
+        print("Usuario no encontrado")
+    return True
+
+def eliminar_usuario(usuarios):
+    nombreUsuario= input("Ingrese nombre de usuario a eliminar: ")
+    usuario = usuarios.find_one({"nombre_usuario": nombreUsuario})
+    if usuario:
+        query = {'nombre_usuario': nombreUsuario}
+        result = usuarios.delete_one(query)
+        ##print(f'{result.deleted_count} documento(s) eliminado(s)')
+        print(f'{result.deleted_count} usuario {nombreUsuario} Eliminado exitosamente')
+    else:
+        print(f'Usuario no existente')
+    
