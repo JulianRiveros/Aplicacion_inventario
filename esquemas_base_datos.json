@@ -1,0 +1,9 @@
+
+{
+    "usuarios": [
+        {"nombre_usuario": "admin", "contraseña": "admin123"}
+    ],
+    "gastos": [
+        {"descripcion": "compra de material", "monto": 100.0}
+    ]
+}
