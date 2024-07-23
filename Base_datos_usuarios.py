@@ -7,7 +7,6 @@ class Usuario:
     def __init__(self, nombreUsuario, contraseña):
         self.nombreUsuario = nombreUsuario
         self.contraseña = contraseña
-
     def __str__(self):
         return f"Usuario: {self.nombreUsuario}"
 
@@ -19,11 +18,13 @@ class Usuario:
 def crear_conexion_base_datos():
     try:
         client = MongoClient('mongodb://localhost:27017/')
+        client.admin.command('ping')
+        print("Conexión a MongoDB exitosa")   
         db = client['GestorLaGrieta'] # Reemplaza 'mydatabase' con tu nombre de base de datos
+        print("Conexión exitosa a GestorLaGrieta")    
         client.admin.command('ping')
         print("Conexión exitosa a MongoDB")
         #print(db.list_collection_names())
-
     except Exception as e:
         print(f"No se pudo conectar a MongoDB: {e}")
 
@@ -40,7 +41,6 @@ def registrar_usuario(nombre_usuario, contrasenia, usuarios):
         return False
     #Hash de la contraseña
     contrasenia_hash = bcrypt.hashpw(contrasenia.encode('utf-8'), bcrypt.gensalt())
-
     usuario_json = {
         "nombre_usuario": nombre_usuario,
         "contraseña": contrasenia_hash  # Asegúrate de hash la contraseña
@@ -71,9 +71,6 @@ def iniciar_sesion(nombre_usuario, contrasenia,usuarios):
         print("El usuario no existe.")
         return False
 
-"""
-
-"""
 
 def buscar_usuario(nombreUsuario,usuarios):
     usuario = usuarios.find_one({"nombre_usuario": nombreUsuario})
