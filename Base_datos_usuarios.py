@@ -1,25 +1,20 @@
 
 from pymongo import MongoClient
 import bcrypt
+import json
 
 
-# Conectar a MongoDB
+# Conexion y verificacion a MongoDB
 def crear_conexion_base_datos():
     try:
         client = MongoClient('mongodb://localhost:27017/')
+        client.admin.command('ping')
+        print("Conexión a MongoDB exitosa")   
         db = client['GestorLaGrieta'] # Reemplaza 'mydatabase' con tu nombre de base de datos
-        print("Conexión exitosa a MongoDB")
+        print("Conexión exitosa a GestorLaGrieta")     
     except Exception as e:
         print(f"No se pudo conectar a MongoDB: {e}")
 
-
-    #Verificar conexion
-    try:
-        # El siguiente comando intentará recuperar la lista de bases de datos y fallará si la conexión no está disponible
-        client.admin.command('ping')
-        print("Conexión a MongoDB exitosa")
-    except Exception as e:
-        print(f"Error al conectar a MongoDB: {e}")
 
     # Definir la colección
     usuarios = db['usuarios']
@@ -32,7 +27,6 @@ def registrar_usuario(nombre_usuario, contrasenia, usuarios):
         return False
     #Hash de la contraseña
     contrasenia_hash = bcrypt.hashpw(contrasenia.encode('utf-8'), bcrypt.gensalt())
-
     #Insertar el nuevo usuario en la base de datos
     usuarios.insert_one({'nombre_usuario': nombre_usuario,
                         'contraseña': contrasenia_hash})
@@ -56,7 +50,4 @@ def iniciar_sesion(nombre_usuario, contrasenia,usuarios):
         print("El usuario no existe.")
         return False
 
-"""
-
-"""
 
