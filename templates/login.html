@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>LA GRIETA</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f2f2f2; /* Color de fondo opcional */
+        }
+        h1 {
+            color: purple; /* Color morado */
+            text-align: center; /* Centrar el título */
+            font-size: 36px; /* Tamaño del texto */
+            text-shadow: 2px 2px 2px rgba(0,0,0,0.5); /* Sombra del texto */
+        }
+        .container {
+            width: 300px;
+            margin: auto;
+        }
+        form {
+            width: 100%;
+            margin-top: 20px;
+        }
+        input[type="text"], input[type="password"], input[type="submit"] {
+            width: 100%;
+            padding: 10px;
+            margin: 5px 0;
+        }
+        .mensaje {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+    <h1>LA GRIETA</h1>
+
+    <div class="container">
+        {% if mensaje %}
+        <p class="mensaje">{{ mensaje }}</p>
+        {% endif %}
+
+        <h2>Iniciar sesión</h2>
+        <form action="{{ url_for('login') }}" method="post">
+            <label for="usuario">Usuario:</label>
+            <input type="text" id="usuario" name="usuario" required>
+
+            <label for="contraseña">Contraseña:</label>
+            <input type="password" id="contraseña" name="contraseña" required>
+
+            <input type="submit" value="Iniciar sesión">
+        </form>
+
+        <h2>Registrar nuevo usuario</h2>
+        <form action="{{ url_for('registro') }}" method="post">
+            <label for="usuario_registro">Usuario:</label>
+            <input type="text" id="usuario_registro" name="usuario" required>
+
+            <label for="contraseña_registro">Contraseña:</label>
+            <input type="password" id="contraseña_registro" name="contraseña" required>
+
+            <input type="submit" value="Registrar usuario">
+        </form>
+    </div>
+</body>
+</html>
