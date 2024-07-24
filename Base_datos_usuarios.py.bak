@@ -2,7 +2,7 @@
 from pymongo import MongoClient
 import bcrypt
 import json
-##import inventarioClass
+import inventarioClass
 
 class Usuario:
     def __init__(self, nombreUsuario, contraseña):
@@ -27,9 +27,10 @@ def crear_conexion_base_datos():
         print("Conexión exitosa a MongoDB")
         #print(db.list_collection_names())
     except Exception as e:
-        print(f"No se pudo conectar a MongoDB: {e}") 
-    return db
+        print(f"No se pudo conectar a MongoDB: {e}")
+
     
+    return db
 # Definir la colección Usuarios
 def coleccion_usuarios():
     usuarios = crear_conexion_base_datos()['usuarios']

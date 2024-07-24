@@ -4,7 +4,7 @@ import Base_datos_usuarios
 
 
 class Inventario:
-    def __init__(self,db) -> None:
+    def _init_(self,db) -> None:
         self.db =db
         self.collection = self.db['inventario']
 
