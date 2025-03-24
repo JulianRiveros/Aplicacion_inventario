@@ -2,6 +2,8 @@ import Base_datos_usuarios
 import gastosClass
 import inventarioClass
 
+import inventarioClass
+
 import getpass
 from colorama import init, Fore, Back, Style
 

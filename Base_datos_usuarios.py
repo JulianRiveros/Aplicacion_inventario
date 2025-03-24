@@ -31,7 +31,6 @@ def crear_conexion_base_datos():
         print(f"No se pudo conectar a MongoDB: {e}") 
     return db
     
-    
 # Definir la colección Usuarios
 def coleccion_usuarios():
     usuarios = crear_conexion_base_datos()['usuarios']
