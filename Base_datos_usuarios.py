@@ -2,7 +2,8 @@
 from pymongo import MongoClient
 import bcrypt
 import json
-##import inventarioClass
+import inventarioClass
+import gastosClass
 
 class Usuario:
     def __init__(self, nombreUsuario, contraseña):
@@ -40,6 +41,14 @@ def coleccion_inventario():
     inventario = inventarioClass.Inventario(crear_conexion_base_datos())
     print("Conexion exitosa a coleccion inventario")
     return inventario
+
+def coleccion_gastos():
+    gastos = gastosClass.Gastos()
+    #gastos = crear_conexion_base_datos()
+    gastos.crear_conexion_base_datos()
+    print("Conexion exitosa a coleccion gastos")
+    return gastos
+
 
 def registrar_usuario(nombre_usuario, contrasenia, usuarios):
     #Verificar si el usuario ya existe

@@ -1,5 +1,9 @@
 import Base_datos_usuarios
+import gastosClass
 import inventarioClass
+
+import inventarioClass
+
 import getpass
 from colorama import init, Fore, Back, Style
 
@@ -21,6 +25,7 @@ def mostrar_menu_usuarios(inicio_sesion, usuarios):
         
         if opcion == "1":
             print("Se Ingresa exitosamente al menu de Gastos")
+            menu_gastos()
         elif opcion == "2":
             print("Se ingresa exitosamente al menu de Ingresos")
         elif opcion == "3":
@@ -98,6 +103,23 @@ def menu_inventario():
         elif opcion =="4":
             inventarioClass.mostrar_inventario()
         elif opcion =="5":
+            break
+        else:
+            print(Fore.RED + "Opcion no valida. Intente nuevamente.")  
+            
+
+def menu_gastos():
+    while True:
+        print("\nOpciones:")
+        print("1. Agregar item de gastos")
+        print("2. Mostrar gastos")
+        print("3. Volver atras")
+        opcion = input ("Seleccione una opcion: ")
+        if opcion =="1":
+            gastosClass.agregar_item_gastos()
+        elif opcion =="2":
+            gastosClass.mostrar_inventario_gastos()
+        elif opcion =="3":
             break
         else:
             print(Fore.RED + "Opcion no valida. Intente nuevamente.")   
