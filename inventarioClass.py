@@ -84,3 +84,5 @@ def deducir_item():
 # Mostrar inventario
 def mostrar_inventario():
     Base_datos_usuarios.coleccion_inventario().mostrar_inventario()
+    
+    

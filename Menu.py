@@ -1,4 +1,7 @@
 import Base_datos_usuarios
+import gastosClass
+import inventarioClass
+
 import getpass
 from colorama import init, Fore, Back, Style
 
@@ -20,9 +23,11 @@ def mostrar_menu_usuarios(inicio_sesion, usuarios):
         
         if opcion == "1":
             print("Se Ingresa exitosamente al menu de Gastos")
+            menu_gastos()
         elif opcion == "2":
             print("Se ingresa exitosamente al menu de Ingresos")
         elif opcion == "3":
+            menu_inventario()
             print("Se ingresa exitosamente al menu de Inventario")
         elif opcion == "4":
             while True:
@@ -77,7 +82,51 @@ def mostrar_menu_principal(usuarios):
         else:
             print(Fore.RED + "Opcion no valida. Intente nuevamente.")
 
+
+def menu_inventario():
+    while True:
+        print("\nOpciones:")
+        print("1. Agregar item al inventario")
+        print("2. Actualizar inventario")
+        print("3. Deducir items vendidos")
+        print("4. Mostrar inventario")
+        print("5. Volver atras")
+        opcion = input ("Seleccione una opcion: ")
+        if opcion =="1":
+            inventarioClass.agregar_item()
+        elif opcion == "2":
+            inventarioClass.actualizar_item()
+        elif opcion == "3":
+            inventarioClass.deducir_item()
+        elif opcion =="4":
+            inventarioClass.mostrar_inventario()
+        elif opcion =="5":
+            break
+        else:
+            print(Fore.RED + "Opcion no valida. Intente nuevamente.")  
+            
+
+def menu_gastos():
+    while True:
+        print("\nOpciones:")
+        print("1. Agregar item de gastos")
+        print("2. Mostrar gastos")
+        print("3. Volver atras")
+        opcion = input ("Seleccione una opcion: ")
+        if opcion =="1":
+            gastosClass.agregar_item_gastos()
+        elif opcion =="2":
+            gastosClass.mostrar_inventario_gastos()
+        elif opcion =="3":
+            break
+        else:
+            print(Fore.RED + "Opcion no valida. Intente nuevamente.")   
+
 if __name__ == "__main__":
-    usuarios = Base_datos_usuarios.crear_conexion_base_datos()
+    usuarios = Base_datos_usuarios.coleccion_usuarios()
     mostrar_menu_principal(usuarios)
+
+
+
+
         
